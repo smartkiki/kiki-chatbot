@@ -1,0 +1,19 @@
+{
+  "name": "kiki-chatbot",
+  "version": "1.0.0",
+  "description": "kiki-chatbot setup",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smartkiki/kiki-chatbot.git"
+  },
+  "author": "CS407 SEP",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/smartkiki/kiki-chatbot/issues"
+  },
+  "homepage": "https://github.com/smartkiki/kiki-chatbot#readme"
+}
