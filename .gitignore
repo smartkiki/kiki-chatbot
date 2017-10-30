@@ -1,2 +1,2 @@
-*.pyc
-__pycache*
+#node_modules/*
+*DS_store
