@@ -10,7 +10,7 @@ const urls = require('./urls');
 //const fb = require('./services/facebook-service');
 
 /*APP SETTINGS DO NOT TOUCH THESE. THEY REMAIN THE SAME ALWAYS*/
-app.set('port', (process.env.PORT || 8000));
+app.set('port', (process.env.PORT || 8082));
 
 if(!module.parent) {
     app.listen(app.get('port'), function() {
@@ -106,7 +106,7 @@ function receivedMessage(event) {
 		};
 		console.log(data);
 		request({
-		uri: urls.backend_url,
+		uri: urls.backend_url+'chatbot',
 		method: 'POST',
 		json: data
 		}, function (error, response, body) {
