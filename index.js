@@ -30,7 +30,7 @@ app.get('/', function( req, res) {
 
 
 /*GET METHOD TO CONNECT TO FACEBOOK*/
-app.get('/webhook/', function (req, res) {
+app.get('/webhook', function (req, res) {
 	if (req.query['hub.verify_token'] === 'kiki') {
 		res.send(req.query['hub.challenge']);
 		console.log("Got a webhook request");
@@ -96,10 +96,30 @@ function receivedMessage(event) {
 			}
 			else {
 				console.log("Response status -> " + fb.sendMessageToFacebook(message));
-		return;
+				return;
+			}
+		});
 	}
-});
-}
+	else if (messageText) {
+		var data = {
+			message : messageText,
+		};
+		console.log(data);
+		request({
+		uri: urls.backend_url,
+		method: 'POST',
+		json: data
+		}, function (error, response, body) {
+			if (!error) {
+				console.log("Sent data to the backend");
+				return;
+			} else {
+				console.error("Failed calling Backend");
+				console.log("the message we call for is " + messageText);
+				return;
+			}
+		});
+	}
 }
 
 
