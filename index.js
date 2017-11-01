@@ -43,6 +43,7 @@ app.get('/webhook', function (req, res) {
 app.post('/webhook/', function(req, res) {
 
 	var data = req.body;
+	console.log("data is " + JSON.stringify(data));
 
 	if (data.object == 'page') {
 		data.entry.forEach(function(pageEntry) {
@@ -53,10 +54,11 @@ app.post('/webhook/', function(req, res) {
 					receivedMessage(messagingEvent);
 				}
 				else if (messagingEvent.postback) {
+					console.log("Got a payload request from Facebook:");
 					receivedPostback(messagingEvent);
 				}
 				else {
-					//console.log("Webhook received messaging event which is not handled");
+					console.log("Webhook received messaging event which is not handled" + JSON.stringify(messagingEvent));
 				}
 			});
 		});
@@ -123,6 +125,43 @@ function receivedMessage(event) {
 		});
 	}
 }
+
+function receivedPostback(event) {
+	var senderID = event.sender.id;
+	var timeOfPostback = event.timestamp;
+
+	var payload = event.postback.payload;
+	var payload_params = payload.split(" ");
+	if (payload_params[0] != null) {
+		console.log("Postback was : " + payload_params[0]);
+		var data = {
+			"user_id": senderID, 
+			"payload_type" : payload,
+		};
+		console.log(payload);
+		request({
+		uri: urls.backend_url+'postback',
+		method: 'POST',
+		json: data
+		}, function (error, response, body) {
+			if (!error) {
+				console.log("Sent postback to the backend" + JSON.stringify(body));
+				var message = fb.createTextMessage(senderID, body.message);
+				fb.sendMessageToFacebook(message);
+				return;
+			} else {
+				console.error("Failed calling Backend");
+				console.log("the payload_params we call for is " + payload_params[0]);
+				return;
+			}
+		});
+	}
+	else {
+		console.log("Postback was : " + payload_params[0]);
+	}
+}
+
+
 
 
 module.exports = app;
