@@ -7,7 +7,7 @@ const config = require('./config');
 const urls = require('./urls');
 
 /*services section*/
-//const fb = require('./services/facebook-service');
+const fb = require('./services/facebook-service');
 
 /*APP SETTINGS DO NOT TOUCH THESE. THEY REMAIN THE SAME ALWAYS*/
 app.set('port', (process.env.PORT || 8082));
@@ -111,7 +111,9 @@ function receivedMessage(event) {
 		json: data
 		}, function (error, response, body) {
 			if (!error) {
-				console.log("Sent data to the backend");
+				console.log("Sent data to the backend" + JSON.stringify(body));
+				var message = fb.createTextMessage(senderID, body.message);
+				fb.sendMessageToFacebook(message);
 				return;
 			} else {
 				console.error("Failed calling Backend");
