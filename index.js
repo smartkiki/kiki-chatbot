@@ -83,24 +83,7 @@ function receivedMessage(event) {
 		return;
 	}
 	else if (quickReply) {
-		var quickReplyPayload = quickReply.payload;
-		//console.log("Quick reply for message %s with payload %s", messageId, quickReplyPayload);
-
-
-		var payload = quickReplyPayload.split(" ");
-
-		console.log("Quick reply with payload %s", payload[1]);
-		//if (payload_params[1] == "1") {
-		console.log("user found without location");
-		User.findOne({ user_id: senderID }, function(err, user) {
-			if (err) {
-				console.log(err);
-			}
-			else {
-				console.log("Response status -> " + fb.sendMessageToFacebook(message));
-				return;
-			}
-		});
+		//nothing to do here
 	}
 	else if (messageText) {
 		var data = {
