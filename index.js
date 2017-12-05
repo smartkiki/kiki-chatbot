@@ -8,7 +8,7 @@ const urls = require('./urls');
 
 /*services section*/
 const fb = require('./services/facebook-service');
-
+const search = require('./services/search-service');
 /*APP SETTINGS DO NOT TOUCH THESE. THEY REMAIN THE SAME ALWAYS*/
 app.set('port', (process.env.PORT || 8082));
 
@@ -66,6 +66,20 @@ app.post('/webhook/', function(req, res) {
 	}
 });
 
+
+/*TO GET SEARCH QUERIES FROM THE PI*/
+app.post('/searchresults', function(req, res) {
+	//here
+	var data = req.body;
+	console.log("data is " + JSON.stringify(data));
+	//handle sending to facebook
+	var elements = search.createSearchCards(data.urls);
+	var message = fb.createCards(data.fbid, elements);
+	console.log("Response status -> " + fb.sendMessageToFacebook(message));
+	res.sendStatus(200)
+});
+
+
 function receivedMessage(event) {
 	var senderID = event.sender.id;
 	var recipientID = event.recipient.id;
@@ -96,7 +110,7 @@ function receivedMessage(event) {
 		json: data
 		}, function (error, response, body) {
 			if (!error) {
-				console.log("Sent data to the backend" + JSON.stringify(body));
+				console.log("Sent data to the backend" + JSON.stringify(data));
 				var message = fb.createTextMessage(senderID, body.message);
 				fb.sendMessageToFacebook(message);
 				return;
